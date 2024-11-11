@@ -1,0 +1,98 @@
+{
+    "models": [
+        {
+            "classname": "Airport",
+            "code": "class Airport(Base):\n    \"\"\"description: This table represents airports, each identified by a unique identifier and name, and located at a specific address.\"\"\"\n    __tablename__ = 'airport'\n    \n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    location = Column(String)\n    code = Column(String, unique=True, nullable=False)",
+            "description": "This table represents airports, each identified by a unique identifier and name, and located at a specific address.",
+            "name": "Airport"
+        },
+        {
+            "classname": "Runway",
+            "code": "class Runway(Base):\n    \"\"\"description: Runways available at different airports, characterized by their length and width.\"\"\"\n    __tablename__ = 'runway'\n    \n    id = Column(Integer, primary_key=True, autoincrement=True)\n    airport_id = Column(Integer, ForeignKey('airport.id'), nullable=False)\n    length = Column(Integer, nullable=False)\n    width = Column(Integer, nullable=False)\n    surface_type = Column(String, nullable=False)",
+            "description": "Runways available at different airports, characterized by their length and width.",
+            "name": "Runway"
+        },
+        {
+            "classname": "Hangar",
+            "code": "class Hangar(Base):\n    \"\"\"description: Hangars in airports, each having a capacity and associated with an airport.\"\"\"\n    __tablename__ = 'hangar'\n    \n    id = Column(Integer, primary_key=True, autoincrement=True)\n    airport_id = Column(Integer, ForeignKey('airport.id'), nullable=False)\n    name = Column(String, nullable=False)\n    capacity = Column(Integer, nullable=False)",
+            "description": "Hangars in airports, each having a capacity and associated with an airport.",
+            "name": "Hangar"
+        },
+        {
+            "classname": "Aircraft",
+            "code": "class Aircraft(Base):\n    \"\"\"description: Aircraft entities detailing the model, seating_capacity, and operator.\"\"\"\n    __tablename__ = 'aircraft'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    model = Column(String, nullable=False)\n    seating_capacity = Column(Integer, nullable=False)\n    operator = Column(String, nullable=False)\n    hangar_id = Column(Integer, ForeignKey('hangar.id'))",
+            "description": "Aircraft entities detailing the model, seating_capacity, and operator.",
+            "name": "Aircraft"
+        },
+        {
+            "classname": "Flight",
+            "code": "class Flight(Base):\n    \"\"\"description: A flight consists of an origin, destination, departure and arrival times.\"\"\"\n    __tablename__ = 'flight'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    aircraft_id = Column(Integer, ForeignKey('aircraft.id'), nullable=False)\n    origin_id = Column(Integer, ForeignKey('airport.id'), nullable=False)\n    destination_id = Column(Integer, ForeignKey('airport.id'), nullable=False)\n    departure_time = Column(DateTime)\n    arrival_time = Column(DateTime)",
+            "description": "A flight consists of an origin, destination, departure and arrival times.",
+            "name": "Flight"
+        },
+        {
+            "classname": "Passenger",
+            "code": "class Passenger(Base):\n    \"\"\"description: Passengers traveling on flights, identified by name and document identification.\"\"\"\n    __tablename__ = 'passenger'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    document_id = Column(String, unique=True, nullable=False)\n    preferred_airline = Column(String)",
+            "description": "Passengers traveling on flights, identified by name and document identification.",
+            "name": "Passenger"
+        },
+        {
+            "classname": "FlightReservation",
+            "code": "class FlightReservation(Base):\n    \"\"\"description: Reservations made by passengers for specific flights.\"\"\"\n    __tablename__ = 'flight_reservation'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    flight_id = Column(Integer, ForeignKey('flight.id'), nullable=False)\n    passenger_id = Column(Integer, ForeignKey('passenger.id'), nullable=False)\n    seat_number = Column(String)\n    reservation_date = Column(DateTime, nullable=False)",
+            "description": "Reservations made by passengers for specific flights.",
+            "name": "FlightReservation"
+        },
+        {
+            "classname": "Crew",
+            "code": "class Crew(Base):\n    \"\"\"description: Crew members categorized by their role and linked to specific flights.\"\"\"\n    __tablename__ = 'crew'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    role = Column(String, nullable=False)\n    flight_id = Column(Integer, ForeignKey('flight.id'), nullable=False)",
+            "description": "Crew members categorized by their role and linked to specific flights.",
+            "name": "Crew"
+        },
+        {
+            "classname": "Maintenance",
+            "code": "class Maintenance(Base):\n    \"\"\"description: Maintenance sessions associated with aircraft, detailing the date and type of service.\"\"\"\n    __tablename__ = 'maintenance'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    aircraft_id = Column(Integer, ForeignKey('aircraft.id'), nullable=False)\n    maintenance_type = Column(String, nullable=False)\n    maintenance_date = Column(DateTime, nullable=False)\n    cost = Column(Integer)",
+            "description": "Maintenance sessions associated with aircraft, detailing the date and type of service.",
+            "name": "Maintenance"
+        },
+        {
+            "classname": "BaggageClaim",
+            "code": "class BaggageClaim(Base):\n    \"\"\"description: Baggage claim stations at airports linked to specific flights.\"\"\"\n    __tablename__ = 'baggage_claim'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    flight_id = Column(Integer, ForeignKey('flight.id'), nullable=False)\n    claim_area = Column(String, nullable=False)\n    status = Column(String, nullable=False)",
+            "description": "Baggage claim stations at airports linked to specific flights.",
+            "name": "BaggageClaim"
+        },
+        {
+            "classname": "Ticket",
+            "code": "class Ticket(Base):\n    \"\"\"description: Tickets issued for flights, linking passengers to seat numbers and flights.\"\"\"\n    __tablename__ = 'ticket'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    passenger_id = Column(Integer, ForeignKey('passenger.id'), nullable=False)\n    flight_id = Column(Integer, ForeignKey('flight.id'), nullable=False)\n    seat_assignment = Column(String, nullable=False)\n    purchase_date = Column(DateTime, nullable=False)",
+            "description": "Tickets issued for flights, linking passengers to seat numbers and flights.",
+            "name": "Ticket"
+        },
+        {
+            "classname": "FuelLog",
+            "code": "class FuelLog(Base):\n    \"\"\"description: Log entries for the fuel used by aircraft on specific dates.\"\"\"\n    __tablename__ = 'fuel_log'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    aircraft_id = Column(Integer, ForeignKey('aircraft.id'), nullable=False)\n    date = Column(DateTime, nullable=False)\n    fuel_amount = Column(Integer, nullable=False)",
+            "description": "Log entries for the fuel used by aircraft on specific dates.",
+            "name": "FuelLog"
+        }
+    ],
+    "rules": [
+        {
+            "name": "Limit_Passengers_Aircraft",
+            "description": "Ensure that the number of passengers on a flight does not exceed the aircraft's seating capacity.",
+            "use_case": "Enforcing passenger capacity constraint on a flight.",
+            "code": "Rule.constraint(\n    validate=Flight,\n    as_condition=lambda row: row.passenger_count <= Aircraft.query.filter(Aircraft.id == row.aircraft_id).first().seating_capacity,\n    error_msg=\"Flight exceeds the aircraft's seating capacity.\")"
+        },
+        {
+            "name": "Passenger_Count",
+            "description": "Calculate the number of passengers per flight.",
+            "use_case": "Derived attribute to keep track of passenger numbers on a flight.",
+            "code": "Rule.count(derive=Flight.passenger_count, as_count_of=FlightReservation)"
+        },
+        {
+            "name": "Aircraft_Total_Fuel_Usage",
+            "description": "Calculation of total fuel used by an aircraft based on logged entries.",
+            "use_case": "Track and log fuel usage of each aircraft over time.",
+            "code": "Rule.sum(derive=Aircraft.total_fuel_used, as_sum_of=FuelLog.fuel_amount)"
+        }
+    ],
+    "test_data": "from datetime import date, datetime\n\nairport1 = Airport(id=1, name='International Airport 1', location='City A', code='IA1')\nairport2 = Airport(id=2, name='International Airport 2', location='City B', code='IA2')\nairport3 = Airport(id=3, name='Regional Airport', location='City C', code='RA1')\nairport4 = Airport(id=4, name='Local Airport', location='City D', code='LA1')\n\nrunway1 = Runway(id=1, airport_id=1, length=4000, width=60, surface_type='Asphalt')\nrunway2 = Runway(id=2, airport_id=2, length=3500, width=55, surface_type='Concrete')\nrunway3 = Runway(id=3, airport_id=3, length=2500, width=50, surface_type='Gravel')\nrunway4 = Runway(id=4, airport_id=1, length=3000, width=50, surface_type='Asphalt')\n\nhangar1 = Hangar(id=1, airport_id=1, name='Alpha Hangar', capacity=5)\nhangar2 = Hangar(id=2, airport_id=2, name='Bravo Hangar', capacity=10)\nhangar3 = Hangar(id=3, airport_id=3, name='Charlie Hangar', capacity=7)\nhangar4 = Hangar(id=4, airport_id=1, name='Delta Hangar', capacity=12)\n\naircraft1 = Aircraft(id=1, model='Boeing 737', seating_capacity=150, operator='Airline 1', hangar_id=1)\naircraft2 = Aircraft(id=2, model='Airbus A320', seating_capacity=180, operator='Airline 2', hangar_id=2)\naircraft3 = Aircraft(id=3, model='Cessna 172', seating_capacity=4, operator='Airline 3', hangar_id=3)\naircraft4 = Aircraft(id=4, model='Boeing 777', seating_capacity=300, operator='Airline 4', hangar_id=1)\n\nflight1 = Flight(id=1, aircraft_id=1, origin_id=1, destination_id=2, departure_time=datetime(2023, 10, 15, 5, 0), arrival_time=datetime(2023, 10, 15, 9, 0))\nflight2 = Flight(id=2, aircraft_id=2, origin_id=2, destination_id=3, departure_time=datetime(2023, 10, 16, 7, 0), arrival_time=datetime(2023, 10, 16, 10, 0))\nflight3 = Flight(id=3, aircraft_id=3, origin_id=3, destination_id=4, departure_time=datetime(2023, 10, 17, 6, 0), arrival_time=datetime(2023, 10, 17, 8, 0))\nflight4 = Flight(id=4, aircraft_id=4, origin_id=1, destination_id=2, departure_time=datetime(2023, 10, 18, 9, 0), arrival_time=datetime(2023, 10, 18, 13, 0))\n\npassenger1 = Passenger(id=1, name='John Doe', document_id='JD123456', preferred_airline='Airline 1')\npassenger2 = Passenger(id=2, name='Jane Smith', document_id='JS654321', preferred_airline='Airline 2')\npassenger3 = Passenger(id=3, name='Alice Brown', document_id='AB112233', preferred_airline='Airline 3')\npassenger4 = Passenger(id=4, name='Bob White', document_id='BW445566', preferred_airline='Airline 4')\n\nflight_reservation1 = FlightReservation(id=1, flight_id=1, passenger_id=1, seat_number='12A', reservation_date=datetime(2023, 10, 1, 12, 0))\nflight_reservation2 = FlightReservation(id=2, flight_id=1, passenger_id=2, seat_number='14B', reservation_date=datetime(2023, 10, 1, 14, 0))\nflight_reservation3 = FlightReservation(id=3, flight_id=2, passenger_id=3, seat_number='15C', reservation_date=datetime(2023, 10, 2, 16, 0))\nflight_reservation4 = FlightReservation(id=4, flight_id=2, passenger_id=4, seat_number='16D', reservation_date=datetime(2023, 10, 2, 18, 0))\n\ncrew1 = Crew(id=1, name='Captain A', role='Pilot', flight_id=1)\ncrew2 = Crew(id=2, name='First Officer B', role='Co-Pilot', flight_id=1)\ncrew3 = Crew(id=3, name='Ground Crew C', role='Ground Staff', flight_id=2)\ncrew4 = Crew(id=4, name='Flight Attendant D', role='Cabin Crew', flight_id=3)\n\nmaintenance1 = Maintenance(id=1, aircraft_id=1, maintenance_type='Engine Check', maintenance_date=datetime(2023, 9, 1, 9, 0), cost=1200)\nmaintenance2 = Maintenance(id=2, aircraft_id=2, maintenance_type='Tire Replacement', maintenance_date=datetime(2023, 9, 3, 10, 0), cost=600)\nmaintenance3 = Maintenance(id=3, aircraft_id=3, maintenance_type='Wing Repair', maintenance_date=datetime(2023, 9, 5, 8, 0), cost=2000)\nmaintenance4 = Maintenance(id=4, aircraft_id=4, maintenance_type='Electrical Check', maintenance_date=datetime(2023, 9, 10, 7, 0), cost=1500)\n\nbaggage_claim1 = BaggageClaim(id=1, flight_id=1, claim_area='Area 1', status='Open')\nbaggage_claim2 = BaggageClaim(id=2, flight_id=2, claim_area='Area 2', status='Closed')\nbaggage_claim3 = BaggageClaim(id=3, flight_id=3, claim_area='Area 3', status='Open')\nbaggage_claim4 = BaggageClaim(id=4, flight_id=4, claim_area='Area 4', status='Closed')\n\nticket1 = Ticket(id=1, passenger_id=1, flight_id=1, seat_assignment='12A', purchase_date=datetime(2023, 9, 10, 10, 0))\nticket2 = Ticket(id=2, passenger_id=2, flight_id=1, seat_assignment='14B', purchase_date=datetime(2023, 9, 11, 11, 0))\nticket3 = Ticket(id=3, passenger_id=3, flight_id=2, seat_assignment='15C', purchase_date=datetime(2023, 9, 12, 12, 0))\nticket4 = Ticket(id=4, passenger_id=4, flight_id=2, seat_assignment='16D', purchase_date=datetime(2023, 9, 13, 13, 0))\n\nfuel_log1 = FuelLog(id=1, aircraft_id=1, date=datetime(2023, 10, 1, 5, 0), fuel_amount=5000)\nfuel_log2 = FuelLog(id=2, aircraft_id=1, date=datetime(2023, 10, 2, 6, 0), fuel_amount=6000)\nfuel_log3 = FuelLog(id=3, aircraft_id=2, date=datetime(2023, 10, 3, 7, 0), fuel_amount=7000)\nfuel_log4 = FuelLog(id=4, aircraft_id=3, date=datetime(2023, 10, 4, 8, 0), fuel_amount=8000)",
+    "name": "airport_management_system"
+}

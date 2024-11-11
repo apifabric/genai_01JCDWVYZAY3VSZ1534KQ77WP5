@@ -1,0 +1,412 @@
+about:
+  date: November 11, 2024 15:20:28
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 14
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Aircraft:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: hangar_id
+    - name: model
+      required: true
+    - name: seating_capacity
+      required: true
+    - name: operator
+      required: true
+    description: Aircraft entities detailing the model, seating_capacity, and operator.
+    info_list: Aircraft entities detailing the model, seating_capacity, and operator.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - aircraft_id
+      name: FlightList
+      resource: Flight
+    - direction: tomany
+      fks:
+      - aircraft_id
+      name: FuelLogList
+      resource: FuelLog
+    - direction: tomany
+      fks:
+      - aircraft_id
+      name: MaintenanceList
+      resource: Maintenance
+    - direction: toone
+      fks:
+      - hangar_id
+      name: hangar
+      resource: Hangar
+    type: Aircraft
+    user_key: id
+  Airport:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: location
+    - name: code
+      required: true
+    - name: id
+    description: This table represents airports, each identified by a unique identifier
+      and name, and located at a specific address.
+    info_list: This table represents airports, each identified by a unique identifier
+      and name, and located at a specific address.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - destination_id
+      name: FlightList
+      resource: Flight
+    - direction: tomany
+      fks:
+      - origin_id
+      name: originFlightList
+      resource: Flight
+    - direction: tomany
+      fks:
+      - airport_id
+      name: HangarList
+      resource: Hangar
+    - direction: tomany
+      fks:
+      - airport_id
+      name: RunwayList
+      resource: Runway
+    type: Airport
+    user_key: name
+  BaggageClaim:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: flight_id
+      required: true
+    - name: claim_area
+      required: true
+    - name: status
+      required: true
+    description: Baggage claim stations at airports linked to specific flights.
+    info_list: Baggage claim stations at airports linked to specific flights.
+    tab_groups:
+    - direction: toone
+      fks:
+      - flight_id
+      name: flight
+      resource: Flight
+    type: BaggageClaim
+    user_key: id
+  Crew:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: flight_id
+      required: true
+    - name: role
+      required: true
+    - name: id
+    description: Crew members categorized by their role and linked to specific flights.
+    info_list: Crew members categorized by their role and linked to specific flights.
+    tab_groups:
+    - direction: toone
+      fks:
+      - flight_id
+      name: flight
+      resource: Flight
+    type: Crew
+    user_key: name
+  Flight:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: aircraft_id
+      required: true
+    - name: destination_id
+      required: true
+    - name: origin_id
+      required: true
+    - name: departure_time
+      type: DATETIME
+    - name: arrival_time
+      type: DATETIME
+    description: A flight consists of an origin, destination, departure and arrival
+      times.
+    info_list: A flight consists of an origin, destination, departure and arrival
+      times.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - flight_id
+      name: BaggageClaimList
+      resource: BaggageClaim
+    - direction: tomany
+      fks:
+      - flight_id
+      name: CrewList
+      resource: Crew
+    - direction: tomany
+      fks:
+      - flight_id
+      name: FlightReservationList
+      resource: FlightReservation
+    - direction: tomany
+      fks:
+      - flight_id
+      name: TicketList
+      resource: Ticket
+    - direction: toone
+      fks:
+      - aircraft_id
+      name: aircraft
+      resource: Aircraft
+    - direction: toone
+      fks:
+      - destination_id
+      name: destination
+      resource: Airport
+    - direction: toone
+      fks:
+      - origin_id
+      name: origin
+      resource: Airport
+    type: Flight
+    user_key: id
+  FlightReservation:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: flight_id
+      required: true
+    - name: passenger_id
+      required: true
+    - name: seat_number
+    - name: reservation_date
+      required: true
+      type: DATETIME
+    description: Reservations made by passengers for specific flights.
+    info_list: Reservations made by passengers for specific flights.
+    tab_groups:
+    - direction: toone
+      fks:
+      - flight_id
+      name: flight
+      resource: Flight
+    - direction: toone
+      fks:
+      - passenger_id
+      name: passenger
+      resource: Passenger
+    type: FlightReservation
+    user_key: id
+  FuelLog:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: aircraft_id
+      required: true
+    - name: date
+      required: true
+      type: DATETIME
+    - name: fuel_amount
+      required: true
+    description: Log entries for the fuel used by aircraft on specific dates.
+    info_list: Log entries for the fuel used by aircraft on specific dates.
+    tab_groups:
+    - direction: toone
+      fks:
+      - aircraft_id
+      name: aircraft
+      resource: Aircraft
+    type: FuelLog
+    user_key: id
+  Hangar:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: airport_id
+      required: true
+    - name: capacity
+      required: true
+    - name: id
+    description: Hangars in airports, each having a capacity and associated with an
+      airport.
+    info_list: Hangars in airports, each having a capacity and associated with an
+      airport.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - hangar_id
+      name: AircraftList
+      resource: Aircraft
+    - direction: toone
+      fks:
+      - airport_id
+      name: airport
+      resource: Airport
+    type: Hangar
+    user_key: name
+  Maintenance:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: aircraft_id
+      required: true
+    - name: maintenance_type
+      required: true
+    - name: maintenance_date
+      required: true
+      type: DATETIME
+    - name: cost
+    description: Maintenance sessions associated with aircraft, detailing the date
+      and type of service.
+    info_list: Maintenance sessions associated with aircraft, detailing the date and
+      type of service.
+    tab_groups:
+    - direction: toone
+      fks:
+      - aircraft_id
+      name: aircraft
+      resource: Aircraft
+    type: Maintenance
+    user_key: id
+  Passenger:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: preferred_airline
+    - name: id
+    - name: document_id
+      required: true
+    description: Passengers traveling on flights, identified by name and document
+      identification.
+    info_list: Passengers traveling on flights, identified by name and document identification.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - passenger_id
+      name: FlightReservationList
+      resource: FlightReservation
+    - direction: tomany
+      fks:
+      - passenger_id
+      name: TicketList
+      resource: Ticket
+    type: Passenger
+    user_key: name
+  Runway:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: airport_id
+      required: true
+    - name: length
+      required: true
+    - name: width
+      required: true
+    - name: surface_type
+      required: true
+    description: Runways available at different airports, characterized by their length
+      and width.
+    info_list: Runways available at different airports, characterized by their length
+      and width.
+    tab_groups:
+    - direction: toone
+      fks:
+      - airport_id
+      name: airport
+      resource: Airport
+    type: Runway
+    user_key: id
+  Ticket:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: flight_id
+      required: true
+    - name: passenger_id
+      required: true
+    - name: seat_assignment
+      required: true
+    - name: purchase_date
+      required: true
+      type: DATETIME
+    description: Tickets issued for flights, linking passengers to seat numbers and
+      flights.
+    info_list: Tickets issued for flights, linking passengers to seat numbers and
+      flights.
+    tab_groups:
+    - direction: toone
+      fks:
+      - flight_id
+      name: flight
+      resource: Flight
+    - direction: toone
+      fks:
+      - passenger_id
+      name: passenger
+      resource: Passenger
+    type: Ticket
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

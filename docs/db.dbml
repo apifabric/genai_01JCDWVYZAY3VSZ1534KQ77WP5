@@ -1,0 +1,129 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Aircraft: Aircraft entities detailing the model, seating_capacity, and operator.
+Hangar: Hangars in airports, each having a capacity and associated with an airport.
+Airport: This table represents airports, each identified by a unique identifier and name, and located at a specific address.
+BaggageClaim: Baggage claim stations at airports linked to specific flights.
+Flight: A flight consists of an origin, destination, departure and arrival times.
+Crew: Crew members categorized by their role and linked to specific flights.
+FlightReservation: Reservations made by passengers for specific flights.
+Passenger: Passengers traveling on flights, identified by name and document identification.
+FuelLog: Log entries for the fuel used by aircraft on specific dates.
+Maintenance: Maintenance sessions associated with aircraft, detailing the date and type of service.
+Runway: Runways available at different airports, characterized by their length and width.
+Ticket: Tickets issued for flights, linking passengers to seat numbers and flights.
+'''
+}
+
+Table Aircraft {
+    id INTEGER [primary key]
+    model VARCHAR 
+    seating_capacity INTEGER 
+    operator VARCHAR 
+    hangar_id INTEGER 
+    }
+
+Table Hangar {
+    id INTEGER [primary key]
+    airport_id INTEGER 
+    name VARCHAR 
+    capacity INTEGER 
+    }
+
+Table Airport {
+    id INTEGER [primary key]
+    name VARCHAR 
+    location VARCHAR 
+    code VARCHAR 
+    }
+
+Table BaggageClaim {
+    id INTEGER [primary key]
+    flight_id INTEGER 
+    claim_area VARCHAR 
+    status VARCHAR 
+    }
+
+Table Flight {
+    id INTEGER [primary key]
+    aircraft_id INTEGER 
+    origin_id INTEGER 
+    destination_id INTEGER 
+    departure_time DATETIME 
+    arrival_time DATETIME 
+    }
+
+Table Crew {
+    id INTEGER [primary key]
+    name VARCHAR 
+    role VARCHAR 
+    flight_id INTEGER 
+    }
+
+Table FlightReservation {
+    id INTEGER [primary key]
+    flight_id INTEGER 
+    passenger_id INTEGER 
+    seat_number VARCHAR 
+    reservation_date DATETIME 
+    }
+
+Table Passenger {
+    id INTEGER [primary key]
+    name VARCHAR 
+    document_id VARCHAR 
+    preferred_airline VARCHAR 
+    }
+
+Table FuelLog {
+    id INTEGER [primary key]
+    aircraft_id INTEGER 
+    date DATETIME 
+    fuel_amount INTEGER 
+    }
+
+Table Maintenance {
+    id INTEGER [primary key]
+    aircraft_id INTEGER 
+    maintenance_type VARCHAR 
+    maintenance_date DATETIME 
+    cost INTEGER 
+    }
+
+Table Runway {
+    id INTEGER [primary key]
+    airport_id INTEGER 
+    length INTEGER 
+    width INTEGER 
+    surface_type VARCHAR 
+    }
+
+Table Ticket {
+    id INTEGER [primary key]
+    passenger_id INTEGER 
+    flight_id INTEGER 
+    seat_assignment VARCHAR 
+    purchase_date DATETIME 
+    }
+
+
+
+// Relationships
+    Ref: Aircraft.(hangar_id) < Hangar.(id)
+    Ref: Hangar.(airport_id) < Airport.(id)
+    Ref: BaggageClaim.(flight_id) < Flight.(id)
+    Ref: Flight.(aircraft_id) < Aircraft.(id)
+    Ref: Flight.(destination_id) < Airport.(id)
+    Ref: Flight.(origin_id) < Airport.(id)
+    Ref: Crew.(flight_id) < Flight.(id)
+    Ref: FlightReservation.(flight_id) < Flight.(id)
+    Ref: FlightReservation.(passenger_id) < Passenger.(id)
+    Ref: FuelLog.(aircraft_id) < Aircraft.(id)
+    Ref: Maintenance.(aircraft_id) < Aircraft.(id)
+    Ref: Runway.(airport_id) < Airport.(id)
+    Ref: Ticket.(flight_id) < Flight.(id)
+    Ref: Ticket.(passenger_id) < Passenger.(id)

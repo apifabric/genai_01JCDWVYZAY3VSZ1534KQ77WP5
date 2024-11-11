@@ -1,0 +1,53 @@
+<o-form-layout-manager attr="FlightReservation" mode="tab" title="FLIGHTRESERVATION">
+    <div fxFill fxLayout="column" fxLayoutAlign="start">
+        <o-table 
+            attr="FlightReservationTable" 
+            service="FlightReservation" 
+            entity="FlightReservation" 
+            title="FLIGHTRESERVATION"
+            keys="id"
+            columns="id;flight_id;passenger_id;seat_number;reservation_date" 
+            header-actions="R;D"
+            visible-columns="id;flight_id;passenger_id;seat_number;reservation_date"  
+            sort-columns="id" 
+            query-rows="20" 
+            quick-filter="yes"
+            row-height="medium" 
+            select-all-checkbox="true" 
+            pageable="yes"  
+            auto-adjust="true" 
+            virtual-scroll="yes" 
+            edition-mode="dblclick"
+            horizontal-scroll="yes"
+            show-title="yes"
+            export-button="yes">
+            
+            <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-table-column attr="flight_id" title="flight_id">
+    <o-table-cell-renderer-service attr="flight_id" 
+        service="Flight" entity="FlightType" columns="id;id"
+        parent-keys="id:flight_id"
+        value-column="id" keys="flight_id"
+        visible-columns="id" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column attr="passenger_id" title="passenger_id">
+    <o-table-cell-renderer-service attr="passenger_id" 
+        service="Passenger" entity="PassengerType" columns="id;name"
+        parent-keys="id:passenger_id"
+        value-column="name" keys="passenger_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column #seat_number attr="seat_number" title="seat_number" editable="no" required="no" content-align="left"></o-table-column>
+            
+            <o-date-input #reservation_date attr="reservation_date" type="timestamp" label="reservation_date" editable="no" required="yes" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            
+            <o-table-context-menu></o-table-context-menu>
+            <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
+        </o-table>
+    </div>
+</o-form-layout-manager>

@@ -1,0 +1,86 @@
+{
+    "models": [
+        {
+            "classname": "Airport",
+            "code": "class Airport(Base):\n    \"\"\"description: Table representing airports.\"\"\"\n    __tablename__ = 'airport'\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    location = Column(String, nullable=False)\n\n    # Test Data\n    airport1 = Airport(id=1, name=\"Heathrow\", location=\"London\")\n    airport2 = Airport(id=2, name=\"JFK\", location=\"New York\")\n    airport3 = Airport(id=3, name=\"Haneda\", location=\"Tokyo\")\n    airport4 = Airport(id=4, name=\"Charles de Gaulle\", location=\"Paris\")",
+            "description": "Table representing airports.",
+            "name": "Airport"
+        },
+        {
+            "classname": "Flight",
+            "code": "class Flight(Base):\n    \"\"\"description: Table representing flights.\"\"\"\n    __tablename__ = 'flight'\n\n    id = Column(Integer, primary_key=True)\n    flight_number = Column(String, nullable=False)\n    departure_time = Column(DateTime, nullable=False)\n    arrival_time = Column(DateTime, nullable=False)\n    departure_airport_id = Column(Integer, ForeignKey('airport.id'), nullable=False)\n    arrival_airport_id = Column(Integer, ForeignKey('airport.id'), nullable=False)\n\n    # Test Data\n    flight1 = Flight(id=1, flight_number=\"BA123\", departure_time=date(2023, 10, 15), arrival_time=date(2023, 10, 16),\n                     departure_airport_id=1, arrival_airport_id=2)\n    flight2 = Flight(id=2, flight_number=\"DL456\", departure_time=date(2023, 10, 17), arrival_time=date(2023, 10, 18),\n                     departure_airport_id=2, arrival_airport_id=3)\n    flight3 = Flight(id=3, flight_number=\"JL789\", departure_time=date(2023, 10, 19), arrival_time=date(2023, 10, 20),\n                     departure_airport_id=3, arrival_airport_id=4)\n    flight4 = Flight(id=4, flight_number=\"AF101\", departure_time=date(2023, 10, 21), arrival_time=date(2023, 10, 22),\n                     departure_airport_id=4, arrival_airport_id=1)",
+            "description": "Table representing flights.",
+            "name": "Flight"
+        },
+        {
+            "classname": "Passenger",
+            "code": "class Passenger(Base):\n    \"\"\"description: Table representing passengers.\"\"\"\n    __tablename__ = 'passenger'\n\n    id = Column(Integer, primary_key=True)\n    first_name = Column(String, nullable=False)\n    last_name = Column(String, nullable=False)\n    date_of_birth = Column(Date)\n\n    # Test Data\n    passenger1 = Passenger(id=1, first_name=\"John\", last_name=\"Doe\", date_of_birth=date(1985, 5, 20))\n    passenger2 = Passenger(id=2, first_name=\"Jane\", last_name=\"Smith\", date_of_birth=date(1990, 8, 15))\n    passenger3 = Passenger(id=3, first_name=\"Alice\", last_name=\"Johnson\", date_of_birth=date(1992, 10, 30))\n    passenger4 = Passenger(id=4, first_name=\"Bob\", last_name=\"Brown\", date_of_birth=date(1988, 2, 5))",
+            "description": "Table representing passengers.",
+            "name": "Passenger"
+        },
+        {
+            "classname": "Booking",
+            "code": "class Booking(Base):\n    \"\"\"description: Table representing flight bookings.\"\"\"\n    __tablename__ = 'booking'\n\n    id = Column(Integer, primary_key=True)\n    flight_id = Column(Integer, ForeignKey('flight.id'), nullable=False)\n    passenger_id = Column(Integer, ForeignKey('passenger.id'), nullable=False)\n    booking_date = Column(Date, nullable=False)\n\n    # Test Data\n    booking1 = Booking(id=1, flight_id=1, passenger_id=1, booking_date=date(2023, 10, 1))\n    booking2 = Booking(id=2, flight_id=2, passenger_id=2, booking_date=date(2023, 10, 2))\n    booking3 = Booking(id=3, flight_id=3, passenger_id=3, booking_date=date(2023, 10, 3))\n    booking4 = Booking(id=4, flight_id=4, passenger_id=4, booking_date=date(2023, 10, 4))",
+            "description": "Table representing flight bookings.",
+            "name": "Booking"
+        },
+        {
+            "classname": "Airplane",
+            "code": "class Airplane(Base):\n    \"\"\"description: Table representing airplanes.\"\"\"\n    __tablename__ = 'airplane'\n\n    id = Column(Integer, primary_key=True)\n    registration_number = Column(String, nullable=False)\n    seating_capacity = Column(Integer, nullable=False)\n\n    # Test Data\n    airplane1 = Airplane(id=1, registration_number=\"N12345\", seating_capacity=180)\n    airplane2 = Airplane(id=2, registration_number=\"N67890\", seating_capacity=200)\n    airplane3 = Airplane(id=3, registration_number=\"G12345\", seating_capacity=220)\n    airplane4 = Airplane(id=4, registration_number=\"G67890\", seating_capacity=240)",
+            "description": "Table representing airplanes.",
+            "name": "Airplane"
+        },
+        {
+            "classname": "CrewMember",
+            "code": "class CrewMember(Base):\n    \"\"\"description: Table representing crew members.\"\"\"\n    __tablename__ = 'crew_member'\n\n    id = Column(Integer, primary_key=True)\n    first_name = Column(String, nullable=False)\n    last_name = Column(String, nullable=False)\n\n    # Test Data\n    crewmember1 = CrewMember(id=1, first_name=\"Sarah\", last_name=\"Connor\")\n    crewmember2 = CrewMember(id=2, first_name=\"James\", last_name=\"Cameron\")\n    crewmember3 = CrewMember(id=3, first_name=\"Ellen\", last_name=\"Ripley\")\n    crewmember4 = CrewMember(id=4, first_name=\"Tom\", last_name=\"Hanks\")",
+            "description": "Table representing crew members.",
+            "name": "CrewMember"
+        },
+        {
+            "classname": "FlightCrew",
+            "code": "class FlightCrew(Base):\n    \"\"\"description: Table representing the association of crew members to flights.\"\"\"\n    __tablename__ = 'flight_crew'\n\n    id = Column(Integer, primary_key=True)\n    flight_id = Column(Integer, ForeignKey('flight.id'), nullable=False)\n    crew_member_id = Column(Integer, ForeignKey('crew_member.id'), nullable=False)\n\n    # Test Data\n    flightcrew1 = FlightCrew(id=1, flight_id=1, crew_member_id=1)\n    flightcrew2 = FlightCrew(id=2, flight_id=2, crew_member_id=2)\n    flightcrew3 = FlightCrew(id=3, flight_id=3, crew_member_id=3)\n    flightcrew4 = FlightCrew(id=4, flight_id=4, crew_member_id=4)",
+            "description": "Table representing the association of crew members to flights.",
+            "name": "FlightCrew"
+        },
+        {
+            "classname": "Pilot",
+            "code": "class Pilot(Base):\n    \"\"\"description: Table representing pilots.\"\"\"\n    __tablename__ = 'pilot'\n\n    id = Column(Integer, primary_key=True)\n    first_name = Column(String, nullable=False)\n    last_name = Column(String, nullable=False)\n    license_number = Column(String, nullable=False)\n\n    # Test Data\n    pilot1 = Pilot(id=1, first_name=\"Amelia\", last_name=\"Earhart\", license_number=\"P123456\")\n    pilot2 = Pilot(id=2, first_name=\"Chuck\", last_name=\"Yeager\", license_number=\"P234567\")\n    pilot3 = Pilot(id=3, first_name=\"Sally\", last_name=\"Ride\", license_number=\"P345678\")\n    pilot4 = Pilot(id=4, first_name=\"Buzz\", last_name=\"Aldrin\", license_number=\"P456789\")",
+            "description": "Table representing pilots.",
+            "name": "Pilot"
+        },
+        {
+            "classname": "Airline",
+            "code": "class Airline(Base):\n    \"\"\"description: Table representing airlines.\"\"\"\n    __tablename__ = 'airline'\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    country = Column(String, nullable=False)\n\n    # Test Data\n    airline1 = Airline(id=1, name=\"British Airways\", country=\"UK\")\n    airline2 = Airline(id=2, name=\"Delta Air Lines\", country=\"USA\")\n    airline3 = Airline(id=3, name=\"Japan Airlines\", country=\"Japan\")\n    airline4 = Airline(id=4, name=\"Air France\", country=\"France\")",
+            "description": "Table representing airlines.",
+            "name": "Airline"
+        },
+        {
+            "classname": "Luggage",
+            "code": "class Luggage(Base):\n    \"\"\"description: Table representing luggage associated with passengers.\"\"\"\n    __tablename__ = 'luggage'\n\n    id = Column(Integer, primary_key=True)\n    passenger_id = Column(Integer, ForeignKey('passenger.id'), nullable=False)\n    weight = Column(Integer, nullable=False)\n\n    # Test Data\n    luggage1 = Luggage(id=1, passenger_id=1, weight=20)\n    luggage2 = Luggage(id=2, passenger_id=2, weight=23)\n    luggage3 = Luggage(id=3, passenger_id=3, weight=18)\n    luggage4 = Luggage(id=4, passenger_id=4, weight=25)",
+            "description": "Table representing luggage associated with passengers.",
+            "name": "Luggage"
+        },
+        {
+            "classname": "Gate",
+            "code": "class Gate(Base):\n    \"\"\"description: Table representing gates at an airport.\"\"\"\n    __tablename__ = 'gate'\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    airport_id = Column(Integer, ForeignKey('airport.id'), nullable=False)\n\n    # Test Data\n    gate1 = Gate(id=1, name=\"A1\", airport_id=1)\n    gate2 = Gate(id=2, name=\"B2\", airport_id=2)\n    gate3 = Gate(id=3, name=\"C3\", airport_id=3)\n    gate4 = Gate(id=4, name=\"D4\", airport_id=4)",
+            "description": "Table representing gates at an airport.",
+            "name": "Gate"
+        },
+        {
+            "classname": "Maintenance",
+            "code": "class Maintenance(Base):\n    \"\"\"description: Table representing maintenance records for airplanes.\"\"\"\n    __tablename__ = 'maintenance'\n\n    id = Column(Integer, primary_key=True)\n    airplane_id = Column(Integer, ForeignKey('airplane.id'), nullable=False)\n    maintenance_date = Column(Date, nullable=False)\n    details = Column(String, nullable=False)\n\n    # Test Data\n    maintenance1 = Maintenance(id=1, airplane_id=1, maintenance_date=date(2023, 7, 1), details=\"Engine Check\")\n    maintenance2 = Maintenance(id=2, airplane_id=2, maintenance_date=date(2023, 7, 15), details=\"Wing Inspection\")\n    maintenance3 = Maintenance(id=3, airplane_id=3, maintenance_date=date(2023, 7, 20), details=\"Landing Gear Repair\")\n    maintenance4 = Maintenance(id=4, airplane_id=4, maintenance_date=date(2023, 7, 25), details=\"Cabin Refurbishment\")",
+            "description": "Table representing maintenance records for airplanes.",
+            "name": "Maintenance"
+        }
+    ],
+    "rules": [
+        {
+            "name": "Passenger Count",
+            "description": "Ensure that the passenger count does not exceed seating capacity of the airplane for a flight.",
+            "use_case": "Restricting more passengers than the seating capacity.",
+            "code": "Rule.count(derive=Flight.passenger_count, as_count_of=Booking, where=None)\nRule.constraint(validate=Flight,\n                as_condition=lambda row: row.passenger_count <= row.airplane.seating_capacity,\n                error_msg=\"Flight passenger count {row.passenger_count} exceeds airplane capacity {row.airplane.seating_capacity}\")"
+        }
+    ],
+    "test_data": "Generates four rows of test data for each table, ensuring all key attributes are initialized properly and instances are created separately.",
+    "name": "AirportManagement"
+}

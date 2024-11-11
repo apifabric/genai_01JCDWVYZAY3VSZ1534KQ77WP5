@@ -1,0 +1,2 @@
+Error creating database from model: November 11, 2024 15:19:24
+invalid syntax (create_db_models.py, line 223)
